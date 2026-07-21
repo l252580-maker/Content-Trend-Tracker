@@ -93,5 +93,43 @@ def storeNews(topic, articles):
         articles (list[NewsArticle]): Cleaned article data to store.
     """
     # TODO: Decide on a storage location/format under data/ (e.g. data/news/<topic>.csv)
-    # TODO: Write articles to disk, avoiding duplicate entries on repeated runs
-    pass
+    os.makedirs("data/news", exist_ok=True)
+    if not articles:
+        print(f"No article\n")
+        return
+
+    filepath = f"data/news/{topic}.csv"
+    exist = os.path.exists(filepath)
+    urls = set()
+
+    if exist:
+        with open(filepath, "r", newline="") as topic_detail:
+            reader = csv.DictReader(topic_detail)
+            for row in reader:
+                urls.add(row["url"])
+
+    new_articles = []
+    for article in articles:
+        if article.url not in urls:
+            new_articles.append(article)
+
+    if len(new_articles) == 0:
+        print(f"No new articles\n")
+        return
+    
+    with open(filepath, "a", newline="") as topic_detail:
+        fieldnames = ["title", "source", "published_at", "description", "url"]
+        writer = csv.DictWriter(topic_detail, fieldnames=fieldnames)
+
+        if not exist:
+            writer.writeheader()
+
+        for article in new_articles:
+            writer.writerow({
+                "title": article.title,
+                "source": article.source,
+                "published_at": article.published_at,
+                "description": article.description,
+                "url": article.url
+            })
+

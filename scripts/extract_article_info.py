@@ -1,6 +1,5 @@
 from src.api import extractArticleInfo
 from src.api import fetchNewsForAllTopics
-from src.models import NewsArticle
 
 list = ["Pakistan", "India", "USA"]
 news = fetchNewsForAllTopics(list)

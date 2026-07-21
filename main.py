@@ -1,6 +1,7 @@
 from src.history import readAlreadyCoveredTopics
 from src.api import fetchNewsForAllTopics
 from src.api import extractArticleInfo
+from src.api import storeNews
 
 def addNewTopic(topic):
     with open("data/already_covered.csv", "a") as covered:
@@ -10,9 +11,11 @@ def callExtractArticleInfo(news):
     for topic, articles in news.items():
         print(f"\n{topic}")
 
+        clean_arts = []
         for article in articles:
             article_info = extractArticleInfo(article)
-            article_info.display()
+            clean_arts.append(article_info)
+        storeNews(topic, clean_arts)
 
 # ---------------------------------------MAIN----------------------------------------
 
