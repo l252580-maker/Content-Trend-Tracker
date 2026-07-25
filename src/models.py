@@ -4,10 +4,11 @@ class Topic:
     """
 
     def __init__(self, name):
-        # TODO: Store the topic name
-        # TODO: (Phase 3) add a relevance_score attribute, default None or 0
-        pass
+        self.name = name
+        self.relevance_score = None
 
+    def setRelevanceScore(self, score):
+        self.relevance_score = score
 
 class NewsArticle:
     """
@@ -38,5 +39,5 @@ class Recommendation:
     """
 
     def __init__(self, topic, score):
-        # TODO: Assign topic and score to instance attributes
-        pass
+        self.topic = topic
+        self.score = score

@@ -30,7 +30,12 @@ def fetchNewsForTopic(topic):
     }
 
     # Send GET request to BASE_URL using requests.get(params=...)
-    response = requests.get(BASE_URL, params=params, timeout = 10)
+    try:
+        response = requests.get(BASE_URL, params=params, timeout=10)
+        response.raise_for_status()
+    except requests.exceptions.RequestException as e:
+        print(f"Failed to fetch news: {e}")
+        return []
 
     # Handle non-200 responses and network errors (raise or log, don't crash silently)
     if response.status_code != 200:
@@ -92,7 +97,7 @@ def storeNews(topic, articles):
         topic (str): The topic the articles belong to.
         articles (list[NewsArticle]): Cleaned article data to store.
     """
-    # TODO: Decide on a storage location/format under data/ (e.g. data/news/<topic>.csv)
+    # Decide on a storage location/format under data/ (e.g. data/news/<topic>.csv)
     os.makedirs("data/news", exist_ok=True)
     if not articles:
         print(f"No article\n")
