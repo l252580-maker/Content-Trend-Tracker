@@ -167,16 +167,20 @@ def filterOutCoveredTopics(ranked_topics, covered_topics):
         list[Topic]: Ranked topics with covered ones filtered out or flagged.
     """
     # Cross-reference ranked_topics against covered_topics
-    if len(ranked_topics) == 0:
+    if len(ranked_topics) == 0 or len(covered_topics) == 0:
         return ranked_topics
 
     filtered_topics = []
-    for ranked in ranked_topics: # ranked_topics is a list of Topic objects
-        for covered in covered_topics:
-            if ranked.name == covered:
-                continue  # Skip already-covered topics
-            else:
-                filtered_topics.append(ranked)
+    for ranked in ranked_topics:
+        is_covered = False
+
+        for topic in covered_topics:
+            if topic.lower().split(',')[0] in ranked.name.lower():
+                is_covered = True
+                break
+
+        if not is_covered:
+            filtered_topics.append(ranked)
 
     return filtered_topics
 
