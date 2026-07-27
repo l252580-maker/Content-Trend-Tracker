@@ -119,7 +119,7 @@ def storeNews(topic, articles):
             new_articles.append(article)
 
     if len(new_articles) == 0:
-        print(f"No new articles\n")
+        print(f"No new articles for {topic}\n")
         return
     
     with open(filepath, "a", newline="") as topic_detail:

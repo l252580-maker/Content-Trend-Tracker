@@ -70,7 +70,6 @@ def cleanArticles(articles):
         date = article.get("published_at")
         if date:
             try:
-                print(type(date), repr(date))
                 parsed_date = date_parser.parse(date)
                 article["published_at"] = parsed_date
             except ValueError:
@@ -152,7 +151,8 @@ def loadAlreadyCoveredTopics():
     Returns:
         list[str]: Topic names that have already been covered.
     """
-    return readAlreadyCoveredTopics()
+    covered = readAlreadyCoveredTopics()
+    return covered
 
 
 def filterOutCoveredTopics(ranked_topics, covered_topics):
@@ -167,6 +167,8 @@ def filterOutCoveredTopics(ranked_topics, covered_topics):
         list[Topic]: Ranked topics with covered ones filtered out or flagged.
     """
     # Cross-reference ranked_topics against covered_topics
+
+    covered_topics = covered_topics[1:]  # Skip header row if present
     if len(ranked_topics) == 0 or len(covered_topics) == 0:
         return ranked_topics
 
