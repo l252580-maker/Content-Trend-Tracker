@@ -11,6 +11,7 @@ from src.analyzer import filterOutCoveredTopics
 from src.analyzer import generateRecommendations
 from tabulate import tabulate
 from src.history import searchHistory
+from src.ai import GeminiService
 
 def addNewTopic(topic):
     from datetime import date
@@ -39,12 +40,15 @@ def analyzeNews():
         print(f"Cleaned: {len(cleaned_arts)} articles")
 
         print(f"Calculating relevance score for {topic}...")
-        score = calculateRelevanceScore(cleaned_arts)
-        topics_scores[topic] = score
 
+        trend_analyzer = GeminiService()
+        score = trend_analyzer.analyze_trend(topic, cleaned_arts)
+        topics_scores[topic] = score
         sorted_topics = rankTopics(topics_scores)
 
-    return sorted_topics
+        return sorted_topics
+
+
 
 """
 Phase 4: User Interface & Content History
@@ -139,7 +143,9 @@ callExtractArticleInfo(news)
 sorted_topics = analyzeNews()
 covered = loadAlreadyCoveredTopics()
 filtered = filterOutCoveredTopics(sorted_topics, covered)
-recommendations = generateRecommendations(filtered) # is a list of Recommendation objects
+
+recom = int(input("Enter the number of recommendations you want to see: "))
+recommendations = generateRecommendations(filtered, recom) # is a list of Recommendation objects
 
 choice = None
 while choice != 0:
