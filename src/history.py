@@ -1,3 +1,7 @@
+from datetime import date, timedelta
+
+COVERED_TOPIC_TTL_DAYS = 30  # how long a covered topic stays in already_covered.csv
+
 def readAlreadyCoveredTopics():
     with open("data/already_covered.csv", "r") as covered:
         covered_cntnt = covered.read()
@@ -6,7 +10,25 @@ def readAlreadyCoveredTopics():
             print("No topics have been covered yet")
             return []
 
-    return covered_lines
+    header = covered_lines[0]
+    rows = covered_lines[1:]
+
+    # Drop topics that were added more than 30 days ago
+    cutoff = date.today() - timedelta(days=COVERED_TOPIC_TTL_DAYS)
+    kept_rows = []
+    for row in rows:
+        topic, added_on = row.split(",")
+        if date.fromisoformat(added_on) >= cutoff:
+            kept_rows.append(row)
+
+    # If any topics expired, rewrite the file without them
+    if len(kept_rows) != len(rows):
+        with open("data/already_covered.csv", "w") as covered:
+            covered.write(header + "\n")
+            for row in kept_rows:
+                covered.write(row + "\n")
+
+    return [header] + kept_rows
 
 def searchHistory(query):
     """

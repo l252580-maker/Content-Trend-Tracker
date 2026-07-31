@@ -62,7 +62,7 @@ def fetchNewsForAllTopics(topics):
     for topic in topics:
         news = fetchNewsForTopic(topic)
         result[topic] = news
-        time.sleep(5)  # Delay between requests to avoid hitting API rate limits
+        time.sleep(0.3)  # Gentle delay between requests
 
     return result
 
@@ -105,6 +105,14 @@ def storeNews(topic, articles):
 
     filepath = f"data/news/{topic}.csv"
     exist = os.path.exists(filepath)
+
+    # Delete the file once it's older than 30 days so it doesn't stick around forever
+    if exist:
+        file_age_days = (time.time() - os.path.getmtime(filepath)) / 86400
+        if file_age_days > 30:
+            os.remove(filepath)
+            exist = False
+
     urls = set()
 
     if exist:
@@ -137,4 +145,3 @@ def storeNews(topic, articles):
                 "description": article.description,
                 "url": article.url
             })
-
