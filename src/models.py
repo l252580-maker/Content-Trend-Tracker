@@ -17,7 +17,7 @@ class NewsArticle:
     """
 
     def __init__(self, title, source, published_at, description, url):
-        # TODO: Assign title, source, published_at, description, url to instance attributes
+        
         self.title = title
         self.source = source
         self.published_at = published_at

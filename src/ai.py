@@ -19,14 +19,7 @@ class GeminiService:
     """
 
     def __init__(self):
-        """
-        Initialize the Gemini client.
-
-        TODO:
-            - Load API key.
-            - Initialize Gemini client.
-            - Configure model.
-        """
+        
         load_dotenv()
 
         self.client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))

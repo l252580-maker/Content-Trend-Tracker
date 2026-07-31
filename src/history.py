@@ -40,7 +40,7 @@ def searchHistory(query):
     Returns:
         list[str]: Matching "Topic,Date" lines from already_covered.csv.
     """
-    # TODO: Call readAlreadyCoveredTopics() and filter lines by query (case-insensitive)
+    
     covered = readAlreadyCoveredTopics()
     for row in covered:
         if query.lower() in row.lower():
